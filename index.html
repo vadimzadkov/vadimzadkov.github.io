@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Антимошенник: Проверь свою бдительность</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --danger-color: #f72585;
+            --warning-color: #f8961e;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--dark-color);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            margin-top: 50px;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            border-radius: 2px;
+        }
+        
+        .scenario {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            border-left: 6px solid var(--primary-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        
+        .scenario:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .option {
+            padding: 18px 20px;
+            background-color: white;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        
+        .option:hover {
+            background-color: #f8f9fa;
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+        
+        .result {
+            display: none;
+            padding: 25px;
+            margin-top: 25px;
+            border-radius: var(--border-radius);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .correct {
+            background-color: rgba(76, 201, 240, 0.1);
+            border: 2px solid var(--success-color);
+            color: #155724;
+        }
+        
+        .incorrect {
+            background-color: rgba(247, 37, 133, 0.1);
+            border: 2px solid var(--danger-color);
+            color: #721c24;
+        }
+        
+        .explanation {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fffdf6;
+            border-left: 4px solid var(--warning-color);
+            border-radius: 8px;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: var(--transition);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+        
+        button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(67, 97, 238, 0.4);
+        }
+        
+        .progress {
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--gray-color);
+            font-size: 1.1rem;
+        }
+        
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        .final-screen {
+            text-align: center;
+            padding: 30px;
+            animation: fadeIn 0.8s ease;
+        }
+        
+        .certificate {
+            border: 2px dashed var(--primary-color);
+            padding: 30px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: var(--border-radius);
+            max-width: 500px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+        
+        .certificate::before {
+            content: '✓';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 60px;
+            color: rgba(67, 97, 238, 0.1);
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Антимошенник: Проверь свою бдительность</h1>
+        
+        <div class="progress">Вопрос 1 из 10</div>
+        <div class="score">Правильных ответов: 0</div>
+        
+        <div id="game-container">
+            <div class="scenario">
+                <h3 id="scenario-text">Загрузка вопроса...</h3>
+            </div>
+            
+            <div class="options" id="options-container">
+                <!-- Варианты ответов будут загружены здесь -->
+            </div>
+        </div>
+        
+        <div id="result-container" class="result">
+            <h3 id="result-title">Результат</h3>
+            <p id="result-text"></p>
+            <div class="explanation" id="explanation">
+                <h4>Подробное объяснение:</h4>
+                <p id="explanation-text"></p>
+            </div>
+            <button id="next-btn">Следующий вопрос</button>
+        </div>
+    </div>
+
+    <script>
+        // Массив с 10 вопросами и ответами
+        const questions = [
+            {
+                scenario: "Вы получаете электронное письмо от вашего банка с просьбой срочно подтвердить данные карты из-за подозрительной активности. Письмо выглядит официально, но адрес отправителя немного отличается от обычного. Что вы сделаете?",
+                options: [
+                    "Перейду по ссылке в письме и введу данные карты, чтобы избежать проблем",
+                    "Перезвоню в банк по официальному номеру с их сайта и уточню информацию",
+                    "Отправлю свои данные, но только номер карты без CVV кода"
+                ],
+                correctAnswer: 1,
+                explanation: "Это классический фишинг. Настоящие банки никогда не просят подтвердить данные карты по электронной почте. Правильное действие - позвонить в банк по официальному номеру (найденному на их сайте, а не в письме) и уточнить информацию. Никогда не переходите по ссылкам в подозрительных письмах."
+            },
+            {
+                scenario: "В социальной сети вам пишет симпатичный человек, начинает активное общение, через несколько недель признается в чувствах. Затем просит помочь деньгами на операцию для родственника с обещанием вернуть. Что вы сделаете?",
+                options: [
+                    "Переведу деньги, ведь у человека серьезные проблемы",
+                    "Вежливо откажу, предложу другие способы помощи",
+                    "Попрошу больше информации и документов, подтверждающих необходимость операции"
+                ],
+                correctAnswer: 1,
+                explanation: "Это романтическая афера. Мошенники могут месяцами выстраивать доверительные отношения, чтобы выманить деньги. Лучший вариант - не переводить деньги незнакомцам. Если хотите помочь, предложите официальные благотворительные организации."
+            },
+            {
+                scenario: "Вы видите объявление о продаже нового iPhone по цене в 2 раза ниже рыночной. Продавец просит предоплату через перевод на карту. Что вы сделаете?",
+                options: [
+                    "Переведу предоплату, ведь это выгодное предложение",
+                    "Попрошу оформить сделку через безопасную площадку с защитой покупателя",
+                    "Попрошу скидку за полную предоплату"
+                ],
+                correctAnswer: 1,
+                explanation: "Продажа несуществующих товаров - распространенная схема. Безопасно покупать только через официальные площадки с защитой покупателя или при личной встрече. Никогда не переводите предоплату на карту частным лицам."
+            },
+            {
+                scenario: "Вам звонят с номера, похожего на номер вашего банка, и сообщают, что с вашей карты пытаются списать крупную сумму. Чтобы остановить операцию, нужно назвать код из SMS. Что вы сделаете?",
+                options: [
+                    "Назову код, чтобы защитить свои деньги",
+                    "Скажу, что перезвоню сам, завершу разговор и позвоню в банк по официальному номеру",
+                    "Попрошу оператора назвать мои последние операции"
+                ],
+                correctAnswer: 1,
+                explanation: "Это вишинг. Настоящие сотрудники банка никогда не просят назвать коды из SMS - это всегда мошенники. Правильное действие - завершить разговор и перезвонить в банк по официальному номеру."
+            },
+            {
+                scenario: "Вы получаете письмо о выигрыше в лотерее, в которой не участвовали. Для получения приза нужно оплатить налог в размере 2000 рублей. Что вы сделаете?",
+                options: [
+                    "Оплачу сбор, ведь выигрыш намного больше",
+                    "Удалю письмо, так как это явное мошенничество",
+                    "Напишу в ответ и попрошу вычесть сбор из суммы выигрыша"
+                ],
+                correctAnswer: 1,
+                explanation: "Это классическая схема нигерийских писем. Вас пытаются убедить, что вы что-то выиграли, чтобы получить предоплату. Помните: нельзя выиграть в лотерею, в которой не участвовали."
+            },
+            {
+                scenario: "Вам предлагают инвестировать в криптовалютный проект с гарантированной доходностью 50% в месяц. Для участия нужно внести минимум 5000 рублей. Что вы сделаете?",
+                options: [
+                    "Вложу деньги, ведь это отличная возможность заработать",
+                    "Откажусь, так как это похоже на финансовую пирамиду",
+                    "Попрошу больше информации о проекте и его учредителях"
+                ],
+                correctAnswer: 1,
+                explanation: "Это криптовалютная пирамида. Гарантированная высокая доходность - главный признак мошенничества. Никогда не вкладывайте деньги в сомнительные проекты, особенно с обещаниями быстрой прибыли."
+            },
+            {
+                scenario: "Вы получаете SMS с просьбой пройти опрос за вознаграждение 1000 рублей. Для получения денег нужно перейти по ссылке и ввести данные карты. Что вы сделаете?",
+                options: [
+                    "Пройду опрос и введу данные карты для получения денег",
+                    "Удалю SMS, так как это мошенничество",
+                    "Пройду опрос, но не буду вводить данные карты"
+                ],
+                correctAnswer: 1,
+                explanation: "Это поддельные опросы и розыгрыши. Мошенники собирают данные карт или заражают устройства через ссылки. Никогда не вводите данные карты на сомнительных сайтах и не переходите по подозрительным ссылкам."
+            },
+            {
+                scenario: "На вашем компьютере появилось сообщение, что файлы зашифрованы, и для их восстановления нужно заплатить 10000 рублей в течение 24 часов. Что вы сделаете?",
+                options: [
+                    "Оплачу выкуп, чтобы восстановить важные файлы",
+                    "Не буду платить, попробую восстановить файлы с резервной копии",
+                    "Попробую найти способ расшифровать файлы самостоятельно"
+                ],
+                correctAnswer: 1,
+                explanation: "Это вирус-вымогатель. Оплата не гарантирует восстановление файлов. Всегда делайте резервные копии важных данных. В этой ситуации лучше обратиться к специалистам по кибербезопасности."
+            },
+            {
+                scenario: "Вам предлагают работу с ежедневным заработком 5000 рублей за простые действия в интернете. Для начала нужно оплатить обучающий курс 3000 рублей. Что вы сделаете?",
+                options: [
+                    "Оплачу курс, ведь он быстро окупится",
+                    "Откажусь, так как это типичная схема обмана",
+                    "Попрошу сначала попробовать работать без оплаты"
+                ],
+                correctAnswer: 1,
+                explanation: "Это мошенничество с легким заработком. Настоящая работа никогда не требует предоплаты. Все предложения с гарантированным высоким заработком за простые действия - обман."
+            },
+            {
+                scenario: "Вам пришло письмо от службы безопасности социальной сети с требованием подтвердить пароль, иначе аккаунт будет заблокирован. Ссылка ведет на страницу, очень похожую на официальную. Что вы сделаете?",
+                options: [
+                    "Введу пароль, чтобы сохранить аккаунт",
+                    "Не буду вводить данные, а проверю уведомления в самом приложении соцсети",
+                    "Введу старый пароль, который уже не использую"
+                ],
+                correctAnswer: 1,
+                explanation: "Это фишинговая атака на ваши учетные данные. Официальные сервисы никогда не просят подтвердить пароль по ссылке в письме. Всегда проверяйте уведомления непосредственно в приложении или на официальном сайте."
+            }
+        ];
+
+        // Переменные для отслеживания состояния игры
+        let currentQuestion = 0;
+        let score = 0;
+        
+        // Элементы DOM
+        const scenarioText = document.getElementById('scenario-text');
+        const optionsContainer = document.getElementById('options-container');
+        const resultContainer = document.getElementById('result-container');
+        const resultTitle = document.getElementById('result-title');
+        const resultText = document.getElementById('result-text');
+        const explanationText = document.getElementById('explanation-text');
+        const nextBtn = document.getElementById('next-btn');
+        const progressText = document.querySelector('.progress');
+        const scoreText = document.querySelector('.score');
+        const gameContainer = document.getElementById('game-container');
+        
+        // Загрузка вопроса
+        function loadQuestion(questionIndex) {
+            const question = questions[questionIndex];
+            scenarioText.textContent = question.scenario;
+            
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectAnswer(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            progressText.textContent = `Вопрос ${questionIndex + 1} из ${questions.length}`;
+            resultContainer.style.display = 'none';
+        }
+        
+        // Обработка выбора ответа
+        function selectAnswer(selectedIndex) {
+            const question = questions[currentQuestion];
+            const isCorrect = selectedIndex === question.correctAnswer;
+            
+            if (isCorrect) {
+                score++;
+                resultTitle.textContent = 'Правильно!';
+                resultContainer.className = 'result correct';
+                resultText.textContent = 'Вы выбрали правильный вариант действий. Так держать!';
+            } else {
+                resultTitle.textContent = 'Неправильно!';
+                resultContainer.className = 'result incorrect';
+                resultText.textContent = 'Это не самый безопасный вариант действий в данной ситуации.';
+            }
+            
+            explanationText.textContent = question.explanation;
+            resultContainer.style.display = 'block';
+            scoreText.textContent = `Правильных ответов: ${score}`;
+            
+            // Прокрутка к результату
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Переход к следующему вопросу
+        nextBtn.addEventListener('click', () => {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion(currentQuestion);
+            } else {
+                // Игра завершена
+                showFinalScreen();
+            }
+        });
+        
+        // Показ финального экрана
+        function showFinalScreen() {
+            gameContainer.innerHTML = '';
+            
+            const finalScreen = document.createElement('div');
+            finalScreen.className = 'final-screen';
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            
+            let message;
+            if (percentage >= 90) {
+                message = 'Отличный результат! Вы настоящий эксперт по кибербезопасности.';
+            } else if (percentage >= 70) {
+                message = 'Хороший результат! Вы хорошо разбираетесь в схемах мошенников, но есть куда расти.';
+            } else if (percentage >= 50) {
+                message = 'Неплохо, но вам стоит быть осторожнее. Некоторые схемы мошенников все еще могут вас обмануть.';
+            } else {
+                message = 'Вам стоит серьезно изучить тему кибербезопасности. Вы легко можете стать жертвой мошенников.';
+            }
+            
+            finalScreen.innerHTML = `
+                <h2>Тест завершен!</h2>
+                <p>Ваш результат: ${score} из ${questions.length} (${percentage}%)</p>
+                <p>${message}</p>
+                
+                <div class="certificate">
+                    <h3>Сертификат участника</h3>
+                    <p>${getCertificateText(percentage)}</p>
+                    <p>Дата: ${new Date().toLocaleDateString()}</p>
+                </div>
+                
+                <button onclick="location.reload()">Пройти тест снова</button>
+            `;
+            
+            gameContainer.appendChild(finalScreen);
+        }
+        
+        // Текст сертификата в зависимости от результата
+        function getCertificateText(percentage) {
+            if (percentage >= 90) {
+                return 'Вы продемонстрировали отличные знания в области кибербезопасности и защиты от мошенников.';
+            } else if (percentage >= 70) {
+                return 'Вы показали хороший уровень осведомленности о схемах интернет-мошенничества.';
+            } else if (percentage >= 50) {
+                return 'Вы прошли тест, но вам стоит больше узнать о защите от мошенников в интернете.';
+            } else {
+                return 'Вы завершили тест. Рекомендуем изучить материалы по кибербезопасности для защиты от мошенников.';
+            }
+        }
+        
+        // Начало игры
+        loadQuestion(0);
+    </script>
+</body>
+</html>
